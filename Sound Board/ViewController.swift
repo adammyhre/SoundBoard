@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Sound Board
 //
-//  Created by Bradley Myhre on 2018-05-24.
+//  Created by Adam Myhre on 2018-05-24.
 //  Copyright © 2018 undergalaxie.com. All rights reserved.
 //
 

@@ -2,21 +2,50 @@
 //  SoundViewController.swift
 //  Sound Board
 //
-//  Created by Bradley Myhre on 2018-05-24.
+//  Created by Adam Myhre on 2018-05-24.
 //  Copyright © 2018 undergalaxie.com. All rights reserved.
 //
 
 import UIKit
+import AVFoundation
 
 class SoundViewController: UIViewController {
 
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var nameTextField: UITextField!
     
+    var audioRecorder : AVAudioRecorder?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    
+        setupRecorder()
+    }
+    
+    func setupRecorder () {
+        do {
+        // Create audio session
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            try session.overrideOutputAudioPort(.speaker)
+            try session.setActive(true)
+            
+            // Create url for audio file
+            let basePath : String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
+            let pathComponents = [basePath, "audio.m4a"]
+            let audioURL = NSURL.fileURL(withPathComponents: pathComponents)!
+            
+            // Create settings for audio recorder
+            var settings : [String:Any] = [:]
+            settings[AVFormatIDKey] = Int(kAudioFormatMPEG4AAC)
+            settings[AVSampleRateKey] = 44100.0
+            settings[AVNumberOfChannelsKey] = 2
+            
+            // Create audio recorder object
+            audioRecorder = try AVAudioRecorder(url: audioURL, settings: <#T##[String : Any]#>)
+            audioRecorder?.prepareToRecord()
+            
+        } catch {}
     }
 
     @IBAction func recordTapped(_ sender: Any) {
