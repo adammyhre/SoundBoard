@@ -34,6 +34,7 @@ class SoundViewController: UIViewController {
             let basePath : String = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
             let pathComponents = [basePath, "audio.m4a"]
             let audioURL = NSURL.fileURL(withPathComponents: pathComponents)!
+            print(audioURL)
             
             // Create settings for audio recorder
             var settings : [String:Any] = [:]
@@ -42,13 +43,28 @@ class SoundViewController: UIViewController {
             settings[AVNumberOfChannelsKey] = 2
             
             // Create audio recorder object
-            audioRecorder = try AVAudioRecorder(url: audioURL, settings: <#T##[String : Any]#>)
+            audioRecorder = try AVAudioRecorder(url: audioURL, settings: settings)
             audioRecorder?.prepareToRecord()
             
         } catch {}
     }
 
     @IBAction func recordTapped(_ sender: Any) {
+        if (audioRecorder!.isRecording) {
+            // Stop the recording
+            audioRecorder?.stop()
+            
+            // Change button title to Record
+            recordButton.setTitle("Record", for: .normal)
+
+        } else {
+            // Start the recording
+            audioRecorder?.record()
+            
+            // Change the button title to Stop
+            recordButton.setTitle("Stop", for: .normal)
+            
+        }
     }
     
     @IBAction func playTapped(_ sender: Any) {
